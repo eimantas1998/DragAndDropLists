@@ -279,12 +279,15 @@ class DragAndDropLists extends StatefulWidget {
   /// the vertical axis. By default this is set to true. This may be useful to
   /// disable when setting customDragTargets
   final bool constrainDraggingAxis;
-  
+
   /// If you put a widget before DragAndDropLists there's an unexpected padding
   /// before the list renders. This is the default behaviour for ListView which
   /// is used internally. To remove the padding, set this field to true
   /// https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
   final bool removeTopPadding;
+
+  final MainAxisAlignment nonScrollableMainAxisAlignment;
+  final CrossAxisAlignment nonScrollableCrossAxisAlignment;
 
   DragAndDropLists({
     required this.children,
@@ -336,6 +339,8 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
+    this.nonScrollableCrossAxisAlignment = CrossAxisAlignment.start,
+    this.nonScrollableMainAxisAlignment = MainAxisAlignment.start,
     Key? key,
   }) : super(key: key) {
     if (listGhost == null &&
@@ -482,10 +487,14 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       DragAndDropBuilderParameters parameters) {
     if (widget.axis == Axis.vertical) {
       return Column(
+        crossAxisAlignment: widget.nonScrollableCrossAxisAlignment,
+        mainAxisAlignment: widget.nonScrollableMainAxisAlignment,
         children: _buildOuterList(dragAndDropListTarget, parameters),
       );
     } else {
       return Row(
+        crossAxisAlignment: widget.nonScrollableCrossAxisAlignment,
+        mainAxisAlignment: widget.nonScrollableMainAxisAlignment,
         children: _buildOuterList(dragAndDropListTarget, parameters),
       );
     }
